@@ -84,9 +84,9 @@
   <name>Jahia Macros</name>
   <description>This is a custom module for running on a Jahia server.</description>
   <scm>
-    <connection>scm:svn:https://devtools.jahia.com/svn/jahia/tags/JAHIA_7.0.0.2-SNAPSHOT/modules/macros</connection>
-    <developerConnection>scm:svn:https://devtools.jahia.com/svn/jahia/tags/JAHIA_7.0.0.2-SNAPSHOT/modules/macros</developerConnection>
-    <url>https://devtools.jahia.com/svn/jahia/tags/JAHIA_7.0.0.2-SNAPSHOT/modules/macros</url>
+    <connection>scm:svn:https://devtools.jahia.com/svn/jahia/branches/JAHIA-7-0-X-X-BRANCH/modules/macros</connection>
+    <developerConnection>scm:svn:https://devtools.jahia.com/svn/jahia/branches/JAHIA-7-0-X-X-BRANCH/modules/macros</developerConnection>
+    <url>https://devtools.jahia.com/svn/jahia/branches/JAHIA-7-0-X-X-BRANCH/modules/macros</url>
   </scm>
   <repositories>
     <repository>
