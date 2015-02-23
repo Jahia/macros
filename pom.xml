@@ -81,13 +81,14 @@
         <version>7.1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>macros</artifactId>
+	<version>7.1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Jahia Macros</name>
     <description>This is a custom module for running on a Jahia server.</description>
     <scm>
-        <connection>scm:svn:https://devtools.jahia.com/svn/jahia/trunk/modules/macros</connection>
-        <developerConnection>scm:svn:https://devtools.jahia.com/svn/jahia/trunk/modules/macros</developerConnection>
-        <url>https://devtools.jahia.com/svn/jahia/trunk/modules/macros</url>
+        <connection>scm:git:git@github.com:Jahia/macros.git</connection>
+        <developerConnection>scm:git:git@github.com:Jahia/macros.git</developerConnection>
+        <url>scm:git:git@github.com:Jahia/macros.git</url>
     </scm>
 
     <properties>
