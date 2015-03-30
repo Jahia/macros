@@ -177,7 +177,14 @@ public class MacrosFilter extends AbstractFilter implements InitializingBean, Ap
         bindings.put("currentNode", resource.getNode());
         bindings.put("currentResource", resource);
         bindings.put("renderContext", renderContext);
-        bindings.put( "url", new URLGenerator(renderContext, resource));
+
+        // avoid re-creating a URLGenerator if we don't need to
+        URLGenerator generator = renderContext.getURLGenerator();
+        if(!generator.uses(resource)) {
+            generator = new URLGenerator(renderContext, resource);
+        }
+        bindings.put( "url", generator);
+
         String group = matcher.group(3);
         if(group!=null) {
             int i = 1;
