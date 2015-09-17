@@ -16,18 +16,22 @@ if (renderContext.getRequest().getQueryString() != null) {
     print "?"
     def paramsList = renderContext.getRequest().getQueryString().split('&')
     for(param in paramsList[0..<paramsList.size()-1]){
-        if (param != null) {
-            def (paramName, value) = param.tokenize( '=' )
-            printEncodedString(paramName)
+        if(param.contains("=")) {
+            printEncodedString(param.substring(0, param.indexOf("=")))
             print "="
-            printEncodedString(value)
+            printEncodedString(param.substring(param.indexOf("=") + 1))
+            print "&"
+        } else {
+            printEncodedString(param)
             print "&"
         }
     }
-    def (paramName, value) = paramsList[paramsList.size()-1].tokenize( '=' )
-    if (paramName != null && value != null) {
-        printEncodedString(paramName)
+    def lastParam = paramsList[paramsList.size()-1];
+    if(lastParam.contains("=")) {
+        printEncodedString(lastParam.substring(0, lastParam.indexOf("=")))
         print "="
-        printEncodedString(value)
+        printEncodedString(lastParam.substring(lastParam.indexOf("=") + 1))
+    } else {
+        print(paramsList[paramsList.size()-1])
     }
 }
