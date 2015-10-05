@@ -1,37 +1,25 @@
-def printEncodedString(parameter){
-    if(parameter.contains("%25")){
-        def values = parameter.split('%')
-        for(param in values[0..<values.size()-1]){
-            print URLEncoder.encode(param, "UTF-8")
-            print "%"
-        }
-        print URLEncoder.encode(values[values.size()-1], "UTF-8")
-    }
-    else{
-        print URLEncoder.encode(parameter, "UTF-8")
-    }
-}
+def queryString = renderContext.getRequest().getQueryString()
 
-if (renderContext.getRequest().getQueryString() != null) {
-    print "?"
-    def paramsList = renderContext.getRequest().getQueryString().split('&')
-    for(param in paramsList[0..<paramsList.size()-1]){
-        if(param.contains("=")) {
-            printEncodedString(param.substring(0, param.indexOf("=")))
-            print "="
-            printEncodedString(param.substring(param.indexOf("=") + 1))
-            print "&"
-        } else {
-            printEncodedString(param)
-            print "&"
-        }
-    }
-    def lastParam = paramsList[paramsList.size()-1];
-    if(lastParam.contains("=")) {
-        printEncodedString(lastParam.substring(0, lastParam.indexOf("=")))
-        print "="
-        printEncodedString(lastParam.substring(lastParam.indexOf("=") + 1))
+if (queryString != null) {
+    if ("true".equals(renderContext.getRequest().getParameter("encoded_querystring"))) {
+        print "?" + queryString;
     } else {
-        print(paramsList[paramsList.size()-1])
+        def paramsList = queryString.split('&')
+        def encoded = false;
+        paramsList.eachWithIndex { param, index ->
+            print index < 1 ? "?" : "&"
+            def (paramName, value) = param.tokenize('=')
+            if (paramName != null) {
+                print URLEncoder.encode(paramName, "UTF-8")
+                encoded = true;
+                if (value != null) {
+                    print "="
+                    print URLEncoder.encode(value, "UTF-8")
+                }
+            }
+        }
+        if (encoded) {
+            print "&encoded_querystring=true"
+        }
     }
 }
