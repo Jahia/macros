@@ -1,5 +1,5 @@
 if (renderContext.getRequest().getQueryString() != null) {
-    print "?" + renderContext.getRequest().getQueryString()
+    print "?" + org.apache.commons.lang.StringEscapeUtils.escapeXml(renderContext.getRequest().getQueryString())
 } else if (renderContext.getRequest().getAttribute("javax.servlet.forward.query_string") != null) {
-    print "?" + renderContext.getRequest().getAttribute("javax.servlet.forward.query_string")
+    print "?" + org.apache.commons.lang.StringEscapeUtils.escapeXml(renderContext.getRequest().getAttribute("javax.servlet.forward.query_string"))
 }
