@@ -52,7 +52,7 @@
         <version>7.1.0.0</version>
     </parent>
     <artifactId>macros</artifactId>
-    <version>7.1.2</version>
+    <version>7.1.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Jahia Macros</name>
     <description>This is a custom module for running on a Jahia server.</description>
@@ -60,7 +60,7 @@
         <connection>scm:git:git@github.com:Jahia/macros.git</connection>
         <developerConnection>scm:git:git@github.com:Jahia/macros.git</developerConnection>
         <url>scm:git:git@github.com:Jahia/macros.git</url>
-      <tag>7_1_2</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <properties>
