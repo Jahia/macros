@@ -43,51 +43,52 @@
  */
 package org.jahia.modules.macros.filter;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.jcr.RepositoryException;
-import javax.script.*;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.data.templates.JahiaTemplatesPackage;
+import org.jahia.osgi.BundleUtils;
 import org.jahia.registries.ServicesRegistry;
 import org.jahia.services.render.RenderContext;
 import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLGenerator;
 import org.jahia.services.render.filter.AbstractFilter;
 import org.jahia.services.render.filter.RenderChain;
-import org.jahia.services.templates.JahiaTemplateManagerService.TemplatePackageRedeployedEvent;
 import org.jahia.utils.FileUtils;
 import org.jahia.utils.Patterns;
 import org.jahia.utils.ScriptEngineUtils;
+import org.osgi.framework.*;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Deactivate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationListener;
+
+import javax.jcr.RepositoryException;
+import javax.script.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Render filter that searches for known macros in the generated HTML output and evaluates them.
  *
  * @author rincevent
  * @since JAHIA 6.5
- * Created : 21/12/10
  */
-public class MacrosFilter extends AbstractFilter implements InitializingBean, ApplicationListener<TemplatePackageRedeployedEvent> {
+abstract class MacrosFilter extends AbstractFilter {
 
-    private transient static Logger logger = LoggerFactory.getLogger(MacrosFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(MacrosFilter.class);
+
+    private SynchronousBundleListener bundleListener;
 
     private String[] macroLookupPath;
     private Pattern macrosPattern;
     private Map<String, String[]> scriptCache;
-    private ScriptEngineUtils scriptEngineUtils;
     private boolean replaceByErrorMessageOnMissingMacros = true;
-    public void afterPropertiesSet() throws Exception {
-        scriptCache = new LinkedHashMap<String, String[]>();
+
+    public MacrosFilter() {
+        this.scriptCache = new LinkedHashMap<>();
     }
 
     @Override
@@ -112,9 +113,8 @@ public class MacrosFilter extends AbstractFilter implements InitializingBean, Ap
                 JahiaTemplatesPackage module = ServicesRegistry.getInstance().getJahiaTemplateManagerService().getTemplatePackageById(macro[2]);
                 Thread.currentThread().setContextClassLoader(module.getChainedClassLoader());
                 try {
-
                     // execute macro
-                    ScriptEngine scriptEngine = scriptEngineUtils.scriptEngine(macro[1]);
+                    ScriptEngine scriptEngine = ScriptEngineUtils.getInstance().scriptEngine(macro[1]);
                     ScriptContext scriptContext = new SimpleScriptContext();
                     scriptContext.setBindings(getBindings(renderContext, resource, scriptContext, matcher), ScriptContext.ENGINE_SCOPE);
                     scriptContext.setBindings(scriptEngine.getContext().getBindings(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
@@ -222,8 +222,30 @@ public class MacrosFilter extends AbstractFilter implements InitializingBean, Ap
         return null;
     }
 
-    public void onApplicationEvent(TemplatePackageRedeployedEvent event) {
-        scriptCache.clear();
+    @Activate
+    public void start(BundleContext bundleContext) {
+        bundleListener = bundleEvent -> {
+            Bundle bundle = bundleEvent.getBundle();
+            if (bundle == null) {
+                return;
+            }
+
+            if (!BundleUtils.isJahiaModuleBundle(bundle)) {
+                return;
+            }
+
+            int bundleEventType = bundleEvent.getType();
+            if (bundleEventType == BundleEvent.STARTED || bundleEventType == BundleEvent.STOPPED) {
+                scriptCache.clear();
+            }
+        };
+
+        bundleContext.addBundleListener(bundleListener);
+    }
+
+    @Deactivate
+    public void stop(BundleContext bundleContext) {
+        bundleContext.removeBundleListener(bundleListener);
     }
 
     public void setMacroLookupPath(String macroLookupPath) {
@@ -232,10 +254,6 @@ public class MacrosFilter extends AbstractFilter implements InitializingBean, Ap
 
     public void setMacrosRegexp(String macrosRegexp) {
         this.macrosPattern = Pattern.compile(macrosRegexp);
-    }
-
-    public void setScriptEngineUtils(ScriptEngineUtils scriptEngineUtils) {
-        this.scriptEngineUtils = scriptEngineUtils;
     }
 
     public void setReplaceByErrorMessageOnMissingMacros(boolean replaceByErrorMessageOnMissingMacros) {
