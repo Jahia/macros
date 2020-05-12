@@ -54,7 +54,6 @@ import org.osgi.service.component.annotations.Component;
 public class ModuleMacrosFilter extends MacrosFilter {
 
     public ModuleMacrosFilter() {
-        super();
         setPriority(90);
         setDescription("Render filter that searches for known macros in a module generated HTML output and evaluates them");
         setApplyOnTemplateTypes("html,html-.+");

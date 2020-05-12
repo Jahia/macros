@@ -78,7 +78,7 @@ import java.util.regex.Pattern;
  */
 abstract class MacrosFilter extends AbstractFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(org.jahia.modules.macros.filter.MacrosFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(MacrosFilter.class);
 
     private SynchronousBundleListener bundleListener;
 
