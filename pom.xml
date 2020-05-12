@@ -46,28 +46,30 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.jahia.modules</groupId>
         <artifactId>jahia-modules</artifactId>
         <version>8.0.0.0</version>
     </parent>
+
     <artifactId>macros</artifactId>
     <version>8.1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Jahia Macros</name>
     <description>This is a custom module for running on a Jahia server.</description>
+
     <scm>
         <connection>scm:git:git@github.com:Jahia/macros.git</connection>
         <developerConnection>scm:git:git@github.com:Jahia/macros.git</developerConnection>
         <url>scm:git:git@github.com:Jahia/macros.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <jahia-module-type>system</jahia-module-type>
         <export-package>org.jahia.modules.macros.filter</export-package>
-        <require-capability>osgi.extender;filter:="(osgi.extender=org.jahia.bundles.blueprint.extender.config)"</require-capability>
-        <jahia-module-signature>MC0CFAE+A12KyKULdFOrLi9RwyG9YlC7AhUAgUchfthoXJHxQlfH7qSQPWu00Bs=</jahia-module-signature>
+        <jahia-module-signature>MCwCFExb2RfzJ1ee/h9G5pdA02LHGl5nAhQmQH84idL5f6/cL2MqXvWbKepO1g==</jahia-module-signature>
     </properties>
 
     <repositories>
@@ -84,5 +86,19 @@
             <url>https://devtools.jahia.com/nexus/content/groups/public</url>
         </repository>
     </repositories>
-    
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <_dsannotations>*</_dsannotations>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

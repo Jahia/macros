@@ -50,23 +50,29 @@ import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.nodetypes.ExtendedPropertyDefinition;
 import org.jahia.services.content.nodetypes.initializers.ChoiceListValue;
 import org.jahia.services.content.nodetypes.initializers.ModuleChoiceListInitializer;
+import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 
 import javax.jcr.RepositoryException;
 import java.util.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Damien GAILLARD
- * Date: 11/13/13
- * Time: 4:50 PM
+ * @author Damien GAILLARD
+ * @since JAHIA 7
  */
+@Component(service = ModuleChoiceListInitializer.class, immediate = true)
 public class MacrosChoiceListInitializer implements ModuleChoiceListInitializer {
-    private transient static Logger logger = org.slf4j.LoggerFactory.getLogger(MacrosChoiceListInitializer.class);
-    private String key;
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(MacrosChoiceListInitializer.class);
 
-    private String[] macroLookupPath;
-    private List ignoreMacros;
+    private String key;
+    private List<String> macroLookupPath;
+    private List<String> ignoreMacros;
+
+    public MacrosChoiceListInitializer() {
+        this.key = "choicelistmacros";
+        this.macroLookupPath = Arrays.asList("macros", "WEB-INF/macros", "modules-macros", "WEB-INF/modules-macros");
+        this.ignoreMacros = Arrays.asList("formtoken");
+    }
 
     @Override
     public void setKey(String key) {
@@ -80,7 +86,7 @@ public class MacrosChoiceListInitializer implements ModuleChoiceListInitializer 
 
     @Override
     public List<ChoiceListValue> getChoiceListValues(ExtendedPropertyDefinition epd, String param, List<ChoiceListValue> values, Locale locale, Map<String, Object> context) {
-        List<ChoiceListValue> macrosNames = new ArrayList<ChoiceListValue>();
+        List<ChoiceListValue> macrosNames = new ArrayList<>();
         JCRNodeWrapper node = null;
 
         if (context.containsKey("contextNode") && context.get("contextNode") != null) {
@@ -91,7 +97,7 @@ public class MacrosChoiceListInitializer implements ModuleChoiceListInitializer 
 
         if (node != null) {
             try {
-                Set<JahiaTemplatesPackage> packages = new LinkedHashSet<JahiaTemplatesPackage>();
+                Set<JahiaTemplatesPackage> packages = new LinkedHashSet<>();
 
                 packages.add(ServicesRegistry.getInstance().getJahiaTemplateManagerService().getTemplatePackageById("macros"));
 
@@ -123,13 +129,5 @@ public class MacrosChoiceListInitializer implements ModuleChoiceListInitializer 
             }
         }
         return macrosNames;
-    }
-
-    public void setMacroLookupPath(String macroLookupPath) {
-        this.macroLookupPath = macroLookupPath.split(",");
-    }
-
-    public void setIgnoreMacros(List ignoreMacros) {
-        this.ignoreMacros = ignoreMacros;
     }
 }
