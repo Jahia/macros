@@ -58,7 +58,7 @@ public class GlobalMacrosFilter extends MacrosFilter {
         setDescription("Render filter that searches for known macros in the generated HTML output and evaluates them");
         setApplyOnConfigurations("page,gwt");
         setApplyOnTemplateTypes("html,html-.+");
-        setMacrosRegexp("##([a-zA-Z0-9_]+)(\\(([^\"#]*)(\\s*,\\s*[^\"#]*)*\\))?##");
+        setMacrosRegexp("##([a-zA-Z0-9_]+)(\\(([^\"#]*)\\))?##");
         setMacroLookupPath("macros,WEB-INF/macros");
         setReplaceByErrorMessageOnMissingMacros(true);
     }
