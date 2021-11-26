@@ -57,7 +57,7 @@ public class ModuleMacrosFilter extends MacrosFilter {
         setPriority(90);
         setDescription("Render filter that searches for known macros in a module generated HTML output and evaluates them");
         setApplyOnTemplateTypes("html,html-.+");
-        setMacrosRegexp("##([a-zA-Z0-9_]+)(\\(([^\"#]*)(\\s*,\\s*[^\"#]*)*\\))?##");
+        setMacrosRegexp("##([a-zA-Z0-9_]+)(\\(([^\"#]*)\\))?##");
         setMacroLookupPath("modules-macros,WEB-INF/modules-macros");
         setReplaceByErrorMessageOnMissingMacros(false);
     }
