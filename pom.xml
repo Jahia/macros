@@ -69,7 +69,7 @@
     <properties>
         <jahia-module-type>system</jahia-module-type>
         <export-package>org.jahia.modules.macros.filter</export-package>
-        <jahia-module-signature>MCwCFCm2A0KIdpOpEZD06GuCgCs8bLCqAhR0G078qktfpWGLntiV/zituDwwMw==</jahia-module-signature>
+        <jahia-module-signature>MCwCFDBREEL0pTY5DOggGhbFvE2PMs86AhRBdh4fyANisv1h7lEpgRhkYmxulw==</jahia-module-signature>
         <jahia.plugin.version>6.8</jahia.plugin.version>
     </properties>
 
