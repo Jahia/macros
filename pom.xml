@@ -50,11 +50,11 @@
     <parent>
         <groupId>org.jahia.modules</groupId>
         <artifactId>jahia-modules</artifactId>
-        <version>8.1.6.2</version>
+        <version>8.1.6.1</version>
     </parent>
 
     <artifactId>macros</artifactId>
-    <version>8.5.0-SNAPSHOT</version>
+    <version>8.4.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Jahia Macros</name>
     <description>This is a custom module for running on a Jahia server.</description>
@@ -70,6 +70,7 @@
         <jahia-module-type>system</jahia-module-type>
         <export-package>org.jahia.modules.macros.filter</export-package>
         <jahia-module-signature>MCwCFCm2A0KIdpOpEZD06GuCgCs8bLCqAhR0G078qktfpWGLntiV/zituDwwMw==</jahia-module-signature>
+        <jahia.plugin.version>6.8</jahia.plugin.version>
     </properties>
 
     <repositories>
