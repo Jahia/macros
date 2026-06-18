@@ -76,7 +76,7 @@ import java.util.regex.Pattern;
  * @author rincevent
  * @since JAHIA 6.5
  */
-abstract class MacrosFilter extends AbstractFilter {
+public abstract class MacrosFilter extends AbstractFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(MacrosFilter.class);
 
