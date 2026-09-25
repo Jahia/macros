@@ -1,11 +1,12 @@
 package org.jahia.modules.macros;
 
 import org.apache.commons.io.IOUtils;
+import org.jahia.data.templates.JahiaTemplatesPackage;
 import org.jahia.services.content.JCRContentUtils;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.decorator.JCRSiteNode;
 import org.jahia.services.render.RenderContext;
-import org.jahia.utils.i18n.JahiaResourceBundle;
+import org.jahia.utils.i18n.Messages;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,8 @@ public class ModuleMacrosOutputTest {
     private JCRSiteNode site;
     private JCRNodeWrapper currentNode;
     private HttpServletRequest request;
-    private MockedStatic<JahiaResourceBundle> resourceBundle;
+    private JahiaTemplatesPackage templatePackage;
+    private MockedStatic<Messages> messages;
 
     @Before
     public void setUp() {
@@ -49,16 +51,17 @@ public class ModuleMacrosOutputTest {
         site = mock(JCRSiteNode.class);
         currentNode = mock(JCRNodeWrapper.class);
         request = mock(HttpServletRequest.class);
+        templatePackage = mock(JahiaTemplatesPackage.class);
         when(renderContext.getSite()).thenReturn(site);
         when(renderContext.getRequest()).thenReturn(request);
         when(renderContext.getMainResourceLocale()).thenReturn(Locale.ENGLISH);
-        when(site.getTemplatePackageName()).thenReturn("templates");
-        resourceBundle = mockStatic(JahiaResourceBundle.class);
+        when(site.getTemplatePackage()).thenReturn(templatePackage);
+        messages = mockStatic(Messages.class);
     }
 
     @After
     public void tearDown() {
-        resourceBundle.close();
+        messages.close();
     }
 
     @Test
@@ -78,7 +81,7 @@ public class ModuleMacrosOutputTest {
 
     @Test
     public void aMissingBundleKeyIsPrintedAsHtmlText() throws Exception {
-        resourceBundle.when(() -> JahiaResourceBundle.getString(isNull(), eq("a&b"), any(Locale.class), eq("templates")))
+        messages.when(() -> Messages.get(isNull(), eq(templatePackage), eq("a&b"), any(Locale.class)))
                 .thenThrow(new MissingResourceException("missing", "bundle", "a&b"));
 
         assertEquals("a&amp;b", run("resourceBundle", "a&b"));
@@ -119,7 +122,7 @@ public class ModuleMacrosOutputTest {
     }
 
     private void givenBundleValue(String key, String value) {
-        resourceBundle.when(() -> JahiaResourceBundle.getString(isNull(), eq(key), any(Locale.class), eq("templates")))
+        messages.when(() -> Messages.get(isNull(), eq(templatePackage), eq(key), any(Locale.class)))
                 .thenReturn(value);
     }
 
