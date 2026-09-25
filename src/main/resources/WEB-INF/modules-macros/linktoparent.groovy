@@ -6,4 +6,4 @@ import org.jahia.services.content.JCRContentUtils
  * Time: 5:04 PM
  * To change this template use File | Settings | File Templates.
  */
-print JCRContentUtils.getParentOfType(currentNode,"jnt:page").getAbsoluteUrl(renderContext.getRequest());
+print org.apache.commons.lang.StringEscapeUtils.escapeHtml(JCRContentUtils.getParentOfType(currentNode,"jnt:page").getAbsoluteUrl(renderContext.getRequest()));
