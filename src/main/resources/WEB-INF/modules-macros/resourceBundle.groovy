@@ -1,10 +1,10 @@
 import org.apache.commons.lang.StringEscapeUtils
-import org.jahia.utils.i18n.Messages
+import org.jahia.utils.i18n.JahiaResourceBundle
 
 if(binding.variables.containsKey("param1")){
     try {
         def bundleName = binding.variables.containsKey("param2") ? param2 : null;
-        print StringEscapeUtils.escapeHtml(Messages.get(bundleName, renderContext.getSite().getTemplatePackage(), param1, renderContext.getMainResourceLocale()));
+        print StringEscapeUtils.escapeHtml(JahiaResourceBundle.getString(bundleName, param1, renderContext.getMainResourceLocale(), renderContext.getSite().getTemplatePackageName()));
     } catch(java.util.MissingResourceException e) {
         print StringEscapeUtils.escapeXml(param1);
     }

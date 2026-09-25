@@ -2,10 +2,12 @@ package org.jahia.modules.macros;
 
 import org.apache.commons.io.IOUtils;
 import org.jahia.data.templates.JahiaTemplatesPackage;
+import org.jahia.registries.ServicesRegistry;
 import org.jahia.services.content.JCRContentUtils;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.decorator.JCRSiteNode;
 import org.jahia.services.render.RenderContext;
+import org.jahia.services.templates.JahiaTemplateManagerService;
 import org.jahia.utils.i18n.Messages;
 import org.junit.After;
 import org.junit.Before;
@@ -43,6 +45,7 @@ public class ModuleMacrosOutputTest {
     private JCRNodeWrapper currentNode;
     private HttpServletRequest request;
     private JahiaTemplatesPackage templatePackage;
+    private MockedStatic<ServicesRegistry> servicesRegistry;
     private MockedStatic<Messages> messages;
 
     @Before
@@ -55,13 +58,20 @@ public class ModuleMacrosOutputTest {
         when(renderContext.getSite()).thenReturn(site);
         when(renderContext.getRequest()).thenReturn(request);
         when(renderContext.getMainResourceLocale()).thenReturn(Locale.ENGLISH);
-        when(site.getTemplatePackage()).thenReturn(templatePackage);
+        when(site.getTemplatePackageName()).thenReturn("templates");
+        ServicesRegistry registry = mock(ServicesRegistry.class);
+        JahiaTemplateManagerService templateManager = mock(JahiaTemplateManagerService.class);
+        when(registry.getJahiaTemplateManagerService()).thenReturn(templateManager);
+        when(templateManager.getTemplatePackage("templates")).thenReturn(templatePackage);
+        servicesRegistry = mockStatic(ServicesRegistry.class);
+        servicesRegistry.when(ServicesRegistry::getInstance).thenReturn(registry);
         messages = mockStatic(Messages.class);
     }
 
     @After
     public void tearDown() {
         messages.close();
+        servicesRegistry.close();
     }
 
     @Test
