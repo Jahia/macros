@@ -4,7 +4,7 @@ import org.jahia.utils.i18n.JahiaResourceBundle
 if(binding.variables.containsKey("param1")){
     try {
         def bundleName = binding.variables.containsKey("param2") ? param2 : null;
-        print StringEscapeUtils.escapeHtml(JahiaResourceBundle.getString(bundleName, param1, renderContext.getMainResourceLocale(), renderContext.getSite().getTemplatePackageName()));
+        print StringEscapeUtils.escapeXml(JahiaResourceBundle.getString(bundleName, param1, renderContext.getMainResourceLocale(), renderContext.getSite().getTemplatePackageName()));
     } catch(java.util.MissingResourceException e) {
         print StringEscapeUtils.escapeXml(param1);
     }

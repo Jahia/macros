@@ -83,9 +83,9 @@ public class ModuleMacrosOutputTest {
 
     @Test
     public void aBundleValueIsPrintedAsHtmlText() throws Exception {
-        givenBundleValue("label.quoted", "Say \"hello\" <b>now</b> & later");
+        givenBundleValue("label.quoted", "Say \"hello\" <b>now</b> & it's later");
 
-        assertEquals("Say &quot;hello&quot; &lt;b&gt;now&lt;/b&gt; &amp; later",
+        assertEquals("Say &quot;hello&quot; &lt;b&gt;now&lt;/b&gt; &amp; it&apos;s later",
                 run("resourceBundle", "label.quoted"));
     }
 
@@ -99,9 +99,9 @@ public class ModuleMacrosOutputTest {
 
     @Test
     public void anAuthorNameIsPrintedAsHtmlText() throws Exception {
-        when(currentNode.getCreationUser()).thenReturn("jane <b>doe</b>");
+        when(currentNode.getCreationUser()).thenReturn("jane <b>o'doe</b>");
 
-        assertEquals("jane &lt;b&gt;doe&lt;/b&gt;", run("authorname", null));
+        assertEquals("jane &lt;b&gt;o&apos;doe&lt;/b&gt;", run("authorname", null));
     }
 
     @Test
@@ -115,19 +115,19 @@ public class ModuleMacrosOutputTest {
     public void theHomePageLinkIsPrintedAsAnAttributeValue() throws Exception {
         JCRNodeWrapper home = mock(JCRNodeWrapper.class);
         when(site.getHome()).thenReturn(home);
-        when(home.getAbsoluteUrl(request)).thenReturn("http://example.org/home.html?a=1&b=\"2\"");
+        when(home.getAbsoluteUrl(request)).thenReturn("http://example.org/home.html?a=1&b=\"2\"&c='3'");
 
-        assertEquals("http://example.org/home.html?a=1&amp;b=&quot;2&quot;", run("linktohomepage", null));
+        assertEquals("http://example.org/home.html?a=1&amp;b=&quot;2&quot;&amp;c=&apos;3&apos;", run("linktohomepage", null));
     }
 
     @Test
     public void theParentPageLinkIsPrintedAsAnAttributeValue() throws Exception {
         JCRNodeWrapper parent = mock(JCRNodeWrapper.class);
-        when(parent.getAbsoluteUrl(request)).thenReturn("http://example.org/parent.html?a=1&b=\"2\"");
+        when(parent.getAbsoluteUrl(request)).thenReturn("http://example.org/parent.html?a=1&b=\"2\"&c='3'");
         try (MockedStatic<JCRContentUtils> contentUtils = mockStatic(JCRContentUtils.class)) {
             contentUtils.when(() -> JCRContentUtils.getParentOfType(currentNode, "jnt:page")).thenReturn(parent);
 
-            assertEquals("http://example.org/parent.html?a=1&amp;b=&quot;2&quot;", run("linktoparent", null));
+            assertEquals("http://example.org/parent.html?a=1&amp;b=&quot;2&quot;&amp;c=&apos;3&apos;", run("linktoparent", null));
         }
     }
 
